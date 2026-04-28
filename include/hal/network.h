@@ -11,6 +11,7 @@
 #else
     #define htole32(x) __builtin_bswap32(x)
 #endif
+
 namespace SmartSecurity_Esp {
     struct agreement{
        

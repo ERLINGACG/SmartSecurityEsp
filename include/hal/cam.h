@@ -28,11 +28,11 @@ namespace SmartSecurity_Esp {
             public:
                 void CamInit();
                 void SetCameraConfig(String config){
-                    if(config=="high"){
-                        this->config.frame_size = FRAMESIZE_SVGA;
+                    if(config=="MEDIUM_RESOLUTION"){
+                        this->config.frame_size = FRAMESIZE_QVGA;
                         Serial.println("Set camera resolution to SVGA (800x600)");
-                    }else if(config=="low"){
-                        this->config.frame_size = FRAMESIZE_QQVGA;
+                    }else if(config=="LOW_RESOLUTION"){
+                        this->config.frame_size = FRAMESIZE_VGA;
                         Serial.println("Set camera resolution to QQVGA (160x120)");
                     }
 

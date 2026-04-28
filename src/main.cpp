@@ -28,6 +28,18 @@ void sendImageTask(void *pvParameters) {
   }
   // vTaskDelete(NULL); //完成后删除自身
 }
+void httpTestTask(void *pvParameters){
+  while(1){
+  
+     vTaskDelay(pdMS_TO_TICKS(1000)); // 5秒间隔
+     int httpCode = httpService.postImgTest();
+     Serial.println(httpCode);
+     Serial.print("Free heap: ");
+     Serial.println(ESP.getFreeHeap());
+     Serial.print("Free stack: ");
+     Serial.println(uxTaskGetStackHighWaterMark(NULL)); // 打印当前任务剩余栈空间
+  }
+}
 
 void testTask(void *pvParameters){
     int i = 1;
@@ -69,26 +81,27 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length){
     }
     
     // 检查消息是否为"start"
-    if(message == "high"){
+    if(message == "MEDIUM_RESOLUTION"){
        isPressed = false;
        cam.SetCameraConfig(message);
        isPressed = true;
     }
     // 检查消息是否为"stop"
-    else if(message == "low"){
+    else if(message == "LOW_RESOLUTION"){
+        isPressed = false;
         cam.SetCameraConfig(message);
+         isPressed = true;
     }
 }
 void mqttTask(void *pvParameters){
     const char* mqtt_client_id = "ESP8266Client_001";
-    const char* mqtt_server = "192.168.1.4";
+    // const char* mqtt_server = "192.168.1.4";
     // const char* mqtt_server = "192.168.137.1";
+    const char* mqtt_server = "10.100.88.172";
     const int mqtt_port = 1883;
-    const char* mqtt_topic = "/topic/images/config"; 
+    const char* mqtt_topic = "/topic/image2"; 
     
     
-
-
     WiFiClient client;
     PubSubClient MQTTclient(client);
     auto mqttTest=[&]()->void{
@@ -124,9 +137,12 @@ void setup() {
   Serial.println();
   cam.CamInit();
   // network.connectSTA("4988","00004988");
-  network.connectSTA("西苑201","12345678");
-  network.connectTCP("192.168.1.4",12346);
-//  network.connectSTA("r1","123456789");
+  // network.connectSTA("西苑201","12345678");
+  // network.connectTCP("192.168.1.4",12346);
+  // network.connectSTA("r1","123456789");
+  network.connectSTA("REDMI K90","31415161624");
+  // network.connectTCP("192.168.10.33",12346);
+  network.connectTCP("10.100.88.172",12346);
 //  network.connectTCP("192.168.137.1",12346);
  
     xTaskCreatePinnedToCore(
@@ -138,6 +154,15 @@ void setup() {
       NULL,            // 任务句柄
       0                // 核心编号（0或1）
     );
+    //  xTaskCreatePinnedToCore(
+    //   httpTestTask,   // 任务函数
+    //   "httpTestTask", // 任务名称
+    //   4096,            // 堆栈大小
+    //   NULL,            // 参数
+    //   1,               // 优先级
+    //   NULL,            // 任务句柄
+    //   0                // 核心编号（0或1）
+    // );
     xTaskCreatePinnedToCore(
       mqttTask,   // 任务函数
       "mqttTask", // 任务名称
