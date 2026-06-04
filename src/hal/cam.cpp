@@ -30,7 +30,7 @@ void SmartSecurity_Esp::Cam::CamInit() {
         s->set_awb_gain(s, 1);               // 自动白平衡增益
     }
 
-    this->config.frame_size =   FRAMESIZE_QVGA;
+    this->config.frame_size =   FRAMESIZE_SVGA;
     //可用：FRAMESIZE_QVGA
     this->config.pixel_format = PIXFORMAT_JPEG; // for streaming
  

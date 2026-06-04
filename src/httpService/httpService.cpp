@@ -26,7 +26,7 @@ void SmartSecurity_Esp::HttpService::HttpTest(){
 int SmartSecurity_Esp::HttpService::postImgTest() {
       HTTPClient http;
       String rawTopic = "/topic/image2";
-      http.begin("http://192.168.10.33:8080/group/member/verifyDnnSSDcaffem/path");
+      http.begin("http://10.100.88.172:8080/group/member/verifyDnnSSDcaffem/path");
 
       // 设置multipart/form-data请求头
       String boundary = "----WebKitFormBoundary7MA4YWxkTrZu0gW";
